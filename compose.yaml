@@ -1,0 +1,25 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./docker/local.Dockerfile
+
+    ports:
+      - ${DOCKER_APP_EXPOSED_PORT:?error}:80
+
+    environment:
+      PHP_IDE_CONFIG: "serverName=docker"
+      XDEBUG_MODE: "develop,debug,coverage"
+      XDEBUG_CONFIG: "client_host=host.docker.internal"
+      XDEBUG_TRIGGER: 'yes'
+
+    extra_hosts:
+      - host.docker.internal:${HOST_IP:-172.17.0.1}
+
+    develop:
+      watch:
+        - path: .
+          action: sync
+          target: /app
+        - path: ./composer.json
+          action: rebuild
