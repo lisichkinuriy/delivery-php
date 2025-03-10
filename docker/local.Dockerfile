@@ -4,7 +4,7 @@ COPY .. /app
 
 RUN composer install --ignore-platform-reqs --dev
 
-FROM dunglas/frankenphp
+FROM dunglas/frankenphp:alpine
 
 RUN install-php-extensions \
         xdebug
