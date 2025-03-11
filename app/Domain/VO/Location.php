@@ -24,6 +24,11 @@ readonly final class Location
 
     }
 
+    public function equals(Location $other): bool
+    {
+        return $this->x === $other->x && $this->y === $other->y;
+    }
+
     static public function fake(): Location
     {
         return new self(random_int(self::MIN, self::MAX), random_int(self::MIN, self::MAX));
