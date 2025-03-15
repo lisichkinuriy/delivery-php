@@ -4,14 +4,15 @@ namespace App\Domain\Courier;
 
 use App\Domain\VO\Location;
 use App\Domain\VO\Speed;
+use App\Domain\VO\TransportID;
 use App\Domain\VO\TransportName;
 use App\Utils\Math;
 use Ramsey\Uuid\Uuid;
 
-class Transport
+final class Transport
 {
     private function __construct(
-        private string $id,
+        private TransportID $id,
         private TransportName $name,
         private Speed $speed
     )
@@ -20,11 +21,10 @@ class Transport
 
     static public function create(TransportName $name, Speed $speed): self
     {
-        $uuid = Uuid::uuid4();
-        return new self($uuid->toString(), $name, $speed);
+        return new self(TransportID::generate(), $name, $speed);
     }
 
-    public function getId(): string {
+    public function getId(): TransportID {
         return $this->id;
     }
 

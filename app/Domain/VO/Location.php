@@ -29,9 +29,14 @@ readonly final class Location
         return $this->x === $other->x && $this->y === $other->y;
     }
 
-    static public function fake(): Location
+    static public function fake(): self
     {
         return new self(random_int(self::MIN, self::MAX), random_int(self::MIN, self::MAX));
+    }
+
+    static public function minLocation(): self
+    {
+        return new self(self::MIN, self::MIN);
     }
 
     static public function distance(Location $l1, Location $l2): int {
