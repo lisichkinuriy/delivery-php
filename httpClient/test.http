@@ -1,0 +1,5 @@
+### index
+
+GET {{API_URL}}/
+Content-Type: application/json
+

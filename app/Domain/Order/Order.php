@@ -22,6 +22,11 @@ class Order
         $this->courierID = null;
     }
 
+    public function equals(Order $other): bool
+    {
+        return $this->getId()->equals($other->getId());
+    }
+
     public function isComplete(): bool
     {
         return $this->status === OrderStatus::COMPLETED;

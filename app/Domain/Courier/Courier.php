@@ -28,6 +28,11 @@ final class Courier
         $this->transport = Transport::create($transportName, $speed);
     }
 
+    public function equals(Courier $other): bool
+    {
+        return $this->getId()->equals($other->getId());
+    }
+
     public function getName(): CourierName
     {
         return $this->name;

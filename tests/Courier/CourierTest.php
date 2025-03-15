@@ -36,7 +36,9 @@ class CourierTest extends TestCase
         // Скорость транспорта (велосипедиста): 2 шага в 1 такт
         // Время подлета: 13/2 = 6.5 тактов потребуется курьеру
 
-        $courier = new Courier(CourierName::fake(), Location::minLocation(), TransportName::fake(), Speed::fake());
+        $speed = new Speed(2);
+        $location = Location::minLocation();
+        $courier = new Courier(CourierName::fake(), $location, TransportName::fake(), $speed);
 
         $target = new Location(5, 10);
         $time = $courier->calcTimeToLocation($target);

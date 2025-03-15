@@ -18,6 +18,11 @@ readonly final class OrderID
         }
     }
 
+    public function equals(OrderID $other): bool
+    {
+        return $this->value === $other->value;
+    }
+
     static public function generate(): self
     {
         return new self(Uuid::uuid4());

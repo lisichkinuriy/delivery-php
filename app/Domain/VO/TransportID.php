@@ -18,6 +18,10 @@ readonly final class TransportID
         }
     }
 
+    public function equals(TransportID $other): bool
+    {
+        return $this->value === $other->value;
+    }
     static public function generate(): self
     {
         return new self(Uuid::uuid4());

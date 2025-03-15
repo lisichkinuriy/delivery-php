@@ -19,6 +19,11 @@ final class Transport
     {
     }
 
+    public function equals(Transport $other): bool
+    {
+        return $this->getId()->equals($other->getId());
+    }
+
     static public function create(TransportName $name, Speed $speed): self
     {
         return new self(TransportID::generate(), $name, $speed);

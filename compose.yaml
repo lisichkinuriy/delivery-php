@@ -7,6 +7,9 @@ services:
     ports:
       - ${DOCKER_APP_EXPOSED_PORT:?error}:80
 
+    env_file:
+      - .env
+
     environment:
       PHP_IDE_CONFIG: "serverName=docker"
       XDEBUG_MODE: "develop,debug,coverage"

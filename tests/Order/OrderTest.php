@@ -21,8 +21,8 @@ class OrderTest extends TestCase
         $location = Location::fake();
         $order = new Order($orderID, $location);
 
-        $this->assertEquals($orderID, $order->getId());
-        $this->assertEquals($location, $order->getLocation());
+        $this->assertTrue($orderID->equals($order->getId()));
+        $this->assertTrue($location->equals($order->getLocation()));
         $this->assertTrue($order->isCreated());
         $this->assertNull($order->getCourierID());
     }
