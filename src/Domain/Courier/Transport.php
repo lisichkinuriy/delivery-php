@@ -7,16 +7,36 @@ use App\Domain\VO\Speed;
 use App\Domain\VO\TransportID;
 use App\Domain\VO\TransportName;
 use App\Utils\Math;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\Table;
 use Ramsey\Uuid\Uuid;
 
+#[Entity]
+#[Table(name: 'transports')]
 final class Transport
 {
+    #[Id]
+    #[Column(type: Types::GUID)]
+    private TransportID $id;
+    #[Column(type: Types::STRING)]
+    private TransportName $name;
+    #[Column(type: Types::INTEGER)]
+    private Speed $speed;
+
+
+
     private function __construct(
-        private TransportID $id,
-        private TransportName $name,
-        private Speed $speed
+        TransportID   $id,
+        TransportName $name,
+        Speed         $speed
     )
     {
+        $this->id = $id;
+        $this->name = $name;
+        $this->speed = $speed;
     }
 
     public function equals(Transport $other): bool
@@ -29,21 +49,24 @@ final class Transport
         return new self(TransportID::generate(), $name, $speed);
     }
 
-    public function getId(): TransportID {
+    public function getId(): TransportID
+    {
         return $this->id;
     }
 
-    public function getName(): TransportName {
+    public function getName(): TransportName
+    {
         return $this->name;
     }
 
-    public function getSpeed(): Speed {
+    public function getSpeed(): Speed
+    {
         return $this->speed;
     }
 
     public function move(Location $current, Location $target): Location
     {
-        if($current->equals($target)) {
+        if ($current->equals($target)) {
             return $current;
         }
 
@@ -52,12 +75,12 @@ final class Transport
 
         $range = $this->speed->value;
 
-        if(abs($dx) > $range) {
+        if (abs($dx) > $range) {
             $dx = Math::copysign($range, $dx);
         }
         $range -= abs($dx);
 
-        if(abs($dy) > $range) {
+        if (abs($dy) > $range) {
             $dy = Math::copysign($range, $dy);
         }
 

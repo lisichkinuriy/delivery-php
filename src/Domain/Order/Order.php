@@ -8,16 +8,33 @@ use App\Domain\VO\CourierID;
 use App\Domain\VO\Location;
 use App\Domain\VO\OrderID;
 use App\Domain\VO\OrderStatus;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\Table;
 
+#[Entity]
+#[Table(name: 'orders')]
 class Order
 {
+    #[Id]
+    #[Column(type: Types::GUID, nullable: false)]
+    private OrderID  $id;
+    #[Column(type: 'string', nullable: false)]
     private OrderStatus $status;
+
     private ?CourierID $courierID;
 
+    #[Column(type: Types::JSON, nullable: false)]
+    private Location $location;
+
     public function __construct(
-        private OrderID  $id,
-        private Location $location)
+        OrderID  $id,
+        Location $location)
     {
+        $this->id = $id;
+        $this->location = $location;
         $this->status = OrderStatus::CREATED;
         $this->courierID = null;
     }

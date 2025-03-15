@@ -43,4 +43,6 @@ readonly final class Location
         return abs($l1->x - $l2->x) + abs($l1->y - $l2->y);
     }
 
+
+
 }

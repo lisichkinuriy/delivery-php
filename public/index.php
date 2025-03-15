@@ -1,24 +1,16 @@
 <?php
 
-use App\Application\Container;
-use App\Domain\Services\IOrderDispatcher;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
+use App\Application\Controllers\IndexController;
 
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/../src/bootstrap.php';
 
-$container = new Container();
+
+$containerBuilder = new \DI\ContainerBuilder();
+$containerBuilder->addDefinitions("../config/config.php");
+$container = $containerBuilder->build();
 
 $app = \DI\Bridge\Slim\Bridge::create($container);
-
-$app->get('/', function (Request $request, Response $response) use($app) {
-    $orderDispatcher = $app->getContainer()->get(IOrderDispatcher::class);
-    $response->getBody()->write("Hello world! Dispatcher is: " . $orderDispatcher::class);
-    return $response;
-});
-
-
-
-$app->addErrorMiddleware(true, true, true);
+$app->get('/', [IndexController::class, 'index']);
+$app->addErrorMiddleware($container->get("display_details"), $container->get("log"), $container->get("log_detail"));
 
 $app->run();

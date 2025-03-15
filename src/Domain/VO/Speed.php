@@ -23,5 +23,14 @@ readonly final class Speed
         return new self(random_int(self::MIN, self::MAX));
     }
 
+    public static function min(): self
+    {
+        return new self(self::MIN);
+    }
+
+    public function __toString(): string
+    {
+        return $this->value;
+    }
 
 }

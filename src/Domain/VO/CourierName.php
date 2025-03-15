@@ -24,4 +24,9 @@ readonly final class CourierName
         return new self("fake");
     }
 
+    public function __toString(): string
+    {
+        return $this->value;
+    }
+
 }

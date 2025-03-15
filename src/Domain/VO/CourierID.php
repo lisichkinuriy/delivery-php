@@ -6,7 +6,7 @@ use App\Domain\Exceptions\VOException;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
-readonly final class OrderID
+readonly final class CourierID
 {
 
     public function __construct(
@@ -14,11 +14,11 @@ readonly final class OrderID
     )
     {
         if(false === Uuid::isValid($value)) {
-            throw new VOException("OrderID  is not valid");
+            throw new VOException("CourierID  is not valid");
         }
     }
 
-    public function equals(OrderID $other): bool
+    public function equals(CourierID $other): bool
     {
         return $this->value === $other->value;
     }
@@ -31,6 +31,11 @@ readonly final class OrderID
     static public function fake(): self
     {
         return self::generate();
+    }
+
+    public function __toString(): string
+    {
+        return $this->value;
     }
 
 }

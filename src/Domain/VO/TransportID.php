@@ -32,4 +32,9 @@ readonly final class TransportID
         return self::generate();
     }
 
+    public function __toString(): string
+    {
+        return $this->value;
+    }
+
 }

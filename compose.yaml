@@ -19,10 +19,52 @@ services:
     extra_hosts:
       - host.docker.internal:${HOST_IP:-172.17.0.1}
 
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+
     develop:
       watch:
         - path: .
           action: sync
           target: /app
-        - path: ./composer.json
+          ignore:
+            - vendor/
+            - composer.json
+            - composer.lock
+        - path: composer.json
           action: rebuild
+
+
+  db:
+    image: postgres:17.4-alpine3.21
+
+    ports:
+      - ${DOCKER_DB_EXPOSED_PORT:?error}:5432
+
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?error}
+      POSTGRES_USER: ${DB_USER:?error}
+      POSTGRES_DB: ${DB:?error}
+
+    volumes:
+      - db:/var/lib/postgresql/data
+
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  dbtest:
+    image: postgres:17.4-alpine3.21
+
+    environment:
+      POSTGRES_PASSWORD: ${TEST_DB_PASSWORD:?error}
+      POSTGRES_USER: ${TEST_DB_USER:?error}
+      POSTGRES_DB: ${TEST_DB:?error}
+
+
+volumes:
+  db:

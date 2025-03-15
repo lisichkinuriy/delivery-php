@@ -24,4 +24,13 @@ readonly final class TransportName
         return new self("fake");
     }
 
+    static public function pedestrian(): TransportName
+    {
+        return new self("pedestrian");
+    }
+
+    public function __toString(): string
+    {
+        return $this->value;
+    }
 }
