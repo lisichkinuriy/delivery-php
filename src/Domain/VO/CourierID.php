@@ -3,13 +3,16 @@
 namespace App\Domain\VO;
 
 use App\Domain\Exceptions\VOException;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Embeddable;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
+#[Embeddable]
 readonly final class CourierID
 {
-
     public function __construct(
+        #[Column(type: "string", nullable: true)]
         public string $value
     )
     {

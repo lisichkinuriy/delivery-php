@@ -3,14 +3,22 @@
 namespace App\Domain\VO;
 
 use App\Domain\Exceptions\VOException;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Embeddable;
 
+#[Embeddable]
 readonly final class Location
 {
     const MAX = 10;
     const MIN = 1;
 
+    const X = "x";
+    const Y = "y";
+
     public function __construct(
+        #[Column(type: "integer", nullable: true)]
         public int $x,
+        #[Column(type: "integer", nullable: true)]
         public int $y
     )
     {
@@ -43,6 +51,18 @@ readonly final class Location
         return abs($l1->x - $l2->x) + abs($l1->y - $l2->y);
     }
 
+    static public function fromArray(array $data): self
+    {
+        return new self($data[self::X], $data[self::Y]);
+    }
+
+    public function toArray(): array
+    {
+        return [
+            self::X => $this->x,
+            self::Y => $this->y
+        ];
+    }
 
 
 }

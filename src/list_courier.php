@@ -4,12 +4,15 @@ use App\Domain\Courier\Courier;
 
 require_once "bootstrap.php";
 
-
-$courier = Courier::createHobo();
-
-$couriers = $entityManager->getRepository(Courier::class)->findAll();
-
-foreach ($couriers as $courier) {
-    echo "courier: " . $courier->getName() . "\n";
-}
+//
+//$courier = Courier::createHobo();
+//
+//$repo = $entityManager->getRepository(Courier::class);
+//
+//$couriers = $repo->findAll();
+//
+//foreach ($couriers as $courier) {
+//    echo "courier: " . $courier->getName() . "\n";
+//    echo "transport: " . $courier->getTransport()->getName()->value . "\n";
+//}
 

@@ -16,15 +16,15 @@ use Ramsey\Uuid\Uuid;
 
 #[Entity]
 #[Table(name: 'transports')]
-final class Transport
+class Transport
 {
     #[Id]
     #[Column(type: Types::GUID)]
-    private TransportID $id;
+    private string $id;
     #[Column(type: Types::STRING)]
-    private TransportName $name;
+    private string $name;
     #[Column(type: Types::INTEGER)]
-    private Speed $speed;
+    private int $speed;
 
 
 
@@ -34,9 +34,9 @@ final class Transport
         Speed         $speed
     )
     {
-        $this->id = $id;
-        $this->name = $name;
-        $this->speed = $speed;
+        $this->id = $id->value;
+        $this->name = $name->value;
+        $this->speed = $speed->value;
     }
 
     public function equals(Transport $other): bool
@@ -51,17 +51,17 @@ final class Transport
 
     public function getId(): TransportID
     {
-        return $this->id;
+        return new TransportID($this->id);
     }
 
     public function getName(): TransportName
     {
-        return $this->name;
+        return new TransportName($this->name);
     }
 
     public function getSpeed(): Speed
     {
-        return $this->speed;
+        return new Speed($this->speed);
     }
 
     public function move(Location $current, Location $target): Location
@@ -73,7 +73,7 @@ final class Transport
         $dx = $target->x - $current->x;
         $dy = $target->y - $current->y;
 
-        $range = $this->speed->value;
+        $range = $this->speed;
 
         if (abs($dx) > $range) {
             $dx = Math::copysign($range, $dx);

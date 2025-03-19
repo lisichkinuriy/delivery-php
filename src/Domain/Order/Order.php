@@ -10,6 +10,7 @@ use App\Domain\VO\OrderID;
 use App\Domain\VO\OrderStatus;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Embedded;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\Table;
@@ -21,12 +22,13 @@ class Order
     #[Id]
     #[Column(type: Types::GUID, nullable: false)]
     private OrderID  $id;
-    #[Column(type: 'string', nullable: false)]
+    #[Column(type: Types::STRING, nullable: false, enumType: OrderStatus::class)]
     private OrderStatus $status;
 
+    #[Embedded]
     private ?CourierID $courierID;
 
-    #[Column(type: Types::JSON, nullable: false)]
+    #[Embedded(columnPrefix: false)]
     private Location $location;
 
     public function __construct(

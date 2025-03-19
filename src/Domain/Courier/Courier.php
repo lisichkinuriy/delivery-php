@@ -15,22 +15,23 @@ use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\Table;
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
 
 #[Entity]
 #[Table(name: 'couriers')]
-final class Courier
+class Courier
 {
-    #[OneToOne(targetEntity: Transport::class, inversedBy: 'courier', cascade: ['persist'], orphanRemoval: true)]
+    #[OneToOne(targetEntity: Transport::class, cascade: ['persist'], orphanRemoval: true)]
     private Transport $transport;
     #[Id]
     #[Column(type: Types::GUID, nullable: false)]
-    private CourierID $id;
+    private string $id;
     #[Column(type: Types::STRING, nullable: false, enumType: CourierStatus::class)]
     private CourierStatus $status;
     #[Column(type: Types::STRING, nullable: false)]
-    private CourierName $name;
+    private string $name;
     #[Column(type: Types::JSON, nullable: false)]
-    private Location    $location;
+    private array    $location;
 
     public function __construct(
         CourierName $name,
@@ -39,9 +40,9 @@ final class Courier
         Speed               $speed
     )
     {
-        $this->id = CourierID::generate();
-        $this->name = $name;
-        $this->location = $location;
+        $this->id = CourierID::generate()->value;
+        $this->name = $name->value;
+        $this->location = $location->toArray();
         $this->status = CourierStatus::FREE;
         $this->transport = Transport::create($transportName, $speed);
     }
@@ -62,12 +63,12 @@ final class Courier
 
     public function getName(): CourierName
     {
-        return $this->name;
+        return new CourierName($this->name);
     }
 
     public function getLocation(): Location
     {
-        return $this->location;
+        return Location::fromArray($this->location);
     }
 
     public function getTransport(): Transport
@@ -77,7 +78,7 @@ final class Courier
 
     public function getId(): CourierID
     {
-        return $this->id;
+        return new CourierID($this->id);
     }
 
     public function setFree(): void
@@ -102,7 +103,7 @@ final class Courier
 
     public function calcTimeToLocation(Location $target): float
     {
-        $distance = Location::distance($this->location, $target);
+        $distance = Location::distance($this->getLocation(), $target);
 
         $time = $distance*1.0 / $this->transport->getSpeed()->value;
         return $time;
@@ -110,8 +111,8 @@ final class Courier
 
     public function move(Location $target): void
     {
-        $new_location = $this->transport->move($this->location, $target);
-        $this->location = $new_location;
+        $new_location = $this->transport->move($this->getLocation(), $target);
+        $this->location = $new_location->toArray();
     }
 
 
